@@ -1,0 +1,4 @@
+line-length = 88
+include = ["certbot_dns_mijn_host/**/*.py", "setup.py"]
+
+[lint]
