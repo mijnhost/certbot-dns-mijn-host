@@ -6,3 +6,7 @@ lint-fix:
 
 format:
 	ruff format
+
+test:
+	python -m unittest ./certbot_dns_mijn_host/test_mijn_host.py 
+
