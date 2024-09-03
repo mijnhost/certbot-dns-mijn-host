@@ -16,7 +16,7 @@ class Authenticator(dns_common.DNSAuthenticator):
     def __init__(self, *args, **kwargs):
         super(Authenticator, self).__init__(*args, **kwargs)
         self.credentials: Optional[CredentialsConfiguration] = None
-        self.ttl = 60
+        self.ttl = 15
 
     description = "This plugin configures a DNS TXT record to respond to a dns-01 challenge using the mijn.host API"
 
