@@ -100,7 +100,7 @@ class MijnHostClient(object):
         records = self.get_records(domain).get("data", {}).get("records", [])
         new_record = {
             "type": "TXT",
-            "name": record_name,
+            "name": record_name + ".",
             "value": record_content,
             "ttl": ttl,
         }
@@ -119,7 +119,7 @@ class MijnHostClient(object):
             for r in records
             if not (
                 r["type"] == "TXT"
-                and r["name"] == record_name
+                and r["name"] == record_name + "."
                 and r["value"] == record_content
             )
         ]
