@@ -10,3 +10,8 @@ format:
 test:
 	python -m unittest ./certbot_dns_mijn_host/test_mijn_host.py 
 
+build:
+	python setup.py sdist bdist_wheel
+
+install-local:
+	pip install -e .

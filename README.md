@@ -4,16 +4,16 @@
     />
 </center>
 
-# Mijn Host DNS Certbot Authenticator Plugin
+# mijn.host DNS Certbot Authenticator Plugin
 
-The Mijn Host DNS Certbot Plugin automates SSL/TLS certificate creation by enabling DNS-01 challenges using the Mijn Host API. This plugin is designed to work with the Certbot tool, allowing seamless integration for automated certificate management.
+The mijn.host DNS Certbot Plugin automates SSL/TLS certificate creation by enabling DNS-01 challenges using the mijn.host API. This plugin is designed to work with the Certbot tool, allowing seamless integration for automated certificate management.
 
 ## Requirements
 
 To use the plugin, you'll need the following:
 
-- A Mijn Host account
-- An API key from Mijn Host
+- A mijn.host account
+- An API key from mijn.host
 
 ## Installation
 
@@ -28,7 +28,7 @@ pip install certbot-dns-mijnhost
 | Argument                           | Example           | Description                                                                                     |
 | ---------------------------------- | ----------------- | ----------------------------------------------------------------------------------------------- |
 | --authenticator                    | dns-mijn-host     | Specifies that Certbot should use this plugin. Use dns-mijnhost as the value.                   |
-| --dns-mijnhost-credentials         | ./credentials.ini | Points to the credentials file containing your Mijn Host API key. Required.                     |
+| --dns-mijnhost-credentials         | ./credentials.ini | Points to the credentials file containing your mijn.host API key. Required.                     |
 | --dns-mijnhost-propagation-seconds | 120               | Sets the wait time in seconds before Certbot checks the TXT record. The default is 120 seconds. |
 
 ## Credentials File
@@ -52,7 +52,7 @@ certbot certonly \
   -d '*.example.com'
 ```
 
-The plugin will create a TXT record for the DNS-01 challenge in your Mijn Host DNS zone. After the challenge is verified, the plugin will delete the TXT record.
+The plugin will create a TXT record for the DNS-01 challenge in your mijn.host DNS zone. After the challenge is verified, the plugin will delete the TXT record.
 
 ## Local Development
 
