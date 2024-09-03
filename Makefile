@@ -14,4 +14,4 @@ build:
 	python setup.py sdist bdist_wheel
 
 install-local:
-	pip install -e .
+	pip install --use-pep517 -e .
