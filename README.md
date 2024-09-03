@@ -1,12 +1,14 @@
-<center>
-    <img src="https://assets.eu.apidog.com/app/apidoc-image/custom/20240626/f1508b02-a360-4b89-b7a9-b939a9180c0e.png"
-    alt="mijn.host"
-    />
-</center>
+<a href="https://mijn.host" target="_blank">
+    <center>
+        <img src="https://assets.eu.apidog.com/app/apidoc-image/custom/20240626/f1508b02-a360-4b89-b7a9-b939a9180c0e.png"
+        alt="mijn.host"
+        />
+    </center>
+</a>
 
-# mijn.host DNS Certbot Authenticator Plugin
+# [mijn.host](https://mijn.host) DNS Certbot Authenticator Plugin
 
-The mijn.host DNS Certbot Plugin automates SSL/TLS certificate creation by enabling DNS-01 challenges using the mijn.host API. This plugin is designed to work with the Certbot tool, allowing seamless integration for automated certificate management.
+The [mijn.host](https://mijn.host) DNS Certbot Plugin automates SSL/TLS certificate creation by enabling DNS-01 challenges using the mijn.host API. This plugin is designed to work with the Certbot tool, allowing seamless integration for automated certificate management.
 
 ## Requirements
 
@@ -29,7 +31,7 @@ pip install certbot-dns-mijn-host
 | ---------------------------------- | ----------------- | ----------------------------------------------------------------------------------------------- |
 | --authenticator                    | dns-mijn-host     | Specifies that Certbot should use this plugin. Use dns-mijnhost as the value.                   |
 | --dns-mijnhost-credentials         | ./credentials.ini | Points to the credentials file containing your mijn.host API key. Required.                     |
-| --dns-mijnhost-propagation-seconds | 120               | Sets the wait time in seconds before Certbot checks the TXT record. The default is 120 seconds. |
+| --dns-mijnhost-propagation-seconds | 60                | Sets the wait time in seconds before Certbot checks the TXT record. The default is 120 seconds. |
 
 ## Credentials File
 
@@ -45,9 +47,9 @@ Make sure the file is stored securely and not accessible by unauthorized users.
 certbot certonly \
   --authenticator dns-mijn-host \
   --dns-mijn-host-credentials /path/to/credentials.ini \
-  --dns-mijn-host-propagation-seconds 120 \
+  --dns-mijn-host-propagation-seconds 60 \
   --agree-tos \
-  --rsa-key-size 60 \
+  --rsa-key-size 4096 \
   -d 'example.com' \
   -d '*.example.com'
 ```

@@ -16,7 +16,7 @@ class Authenticator(dns_common.DNSAuthenticator):
     def __init__(self, *args, **kwargs):
         super(Authenticator, self).__init__(*args, **kwargs)
         self.credentials: Optional[CredentialsConfiguration] = None
-        self.ttl = 15
+        self.ttl = 60
 
     description = "This plugin configures a DNS TXT record to respond to a dns-01 challenge using the mijn.host API"
 
@@ -68,13 +68,12 @@ class MijnHostClient(object):
         if resp.status_code not in (200, 202):
             print("Failed function name: ", name, resp.text)
             raise errors.PluginError(
-                f"Received non-OK status from Mijn Host API {resp.status_code}"
+                f"Received non-OK status from mijn.host API {resp.status_code}"
             )
         try:
             return resp.json()
         except json.decoder.JSONDecodeError:
-            raise errors.PluginError(
-                f"API response with non-json: {resp.text}")
+            raise errors.PluginError(f"API response with non-json: {resp.text}")
 
     def get_records(self, domain):
         url = urllib.parse.urljoin(BASE_URL, f"domains/{domain}/dns")
