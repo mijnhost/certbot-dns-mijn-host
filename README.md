@@ -20,7 +20,7 @@ To use the plugin, you'll need the following:
 You can install the plugin using `pip`:
 
 ```bash
-pip install certbot-dns-mijnhost
+pip install certbot-dns-mijn-host
 ```
 
 ## Arguments
