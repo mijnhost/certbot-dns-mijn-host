@@ -18,6 +18,8 @@ class Authenticator(dns_common.DNSAuthenticator):
         self.credentials: Optional[CredentialsConfiguration] = None
         self.ttl = 120
 
+    description = "Obtain certificates using DNS-01 challenge against mijn.host"
+
     @classmethod
     def add_parser_arguments(
         cls, add: Callable[..., None], default_propagation_seconds: int = 10
