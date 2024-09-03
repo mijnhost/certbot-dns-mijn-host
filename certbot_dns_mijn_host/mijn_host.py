@@ -100,11 +100,12 @@ class MijnHostClient(object):
             "value": record_content,
             "ttl": ttl,
         }
-        filtered_records = [
-            r for r in records if not (r["type"] == "TXT" and r["name"] == (record_name + "."))
-        ]
-        filtered_records.append(new_record)
-        self.update_records(domain, filtered_records)
+
+        if new_record in records:
+            return
+
+        records.append(new_record)
+        self.update_records(domain, records)
 
     def del_txt_record(
         self, domain: str, record_name: str, record_content: str
