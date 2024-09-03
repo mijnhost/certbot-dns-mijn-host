@@ -16,7 +16,7 @@ class Authenticator(dns_common.DNSAuthenticator):
     def __init__(self, *args, **kwargs):
         super(Authenticator, self).__init__(*args, **kwargs)
         self.credentials: Optional[CredentialsConfiguration] = None
-        self.ttl = 120
+        self.ttl = 60
 
     description = "Obtain certificates using DNS-01 challenge against mijn.host"
 
