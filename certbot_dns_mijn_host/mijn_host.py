@@ -62,26 +62,28 @@ class MijnHostClient(object):
             "API-Key": api_key,
         }
 
-    def _handle_response(self, resp: requests.Response) -> Any:
+    def _handle_response(self, resp: requests.Response, name: str = "something") -> Any:
         if resp.status_code not in (200, 202):
+            print("Failed function name: ", name, resp.text)
             raise errors.PluginError(
                 f"Received non-OK status from Mijn Host API {resp.status_code}"
             )
         try:
             return resp.json()
         except json.decoder.JSONDecodeError:
-            raise errors.PluginError(f"API response with non-json: {resp.text}")
+            raise errors.PluginError(
+                f"API response with non-json: {resp.text}")
 
     def list_domains(self):
         url = urllib.parse.urljoin(BASE_URL, "domains")
         req = requests.get(url, headers=self.headers)
-        resp = self._handle_response(req)
+        resp = self._handle_response(req, name="list domains")
         return resp
 
     def get_records(self, domain):
         url = urllib.parse.urljoin(BASE_URL, f"domains/{domain}/dns")
         req = requests.get(url, headers=self.headers)
-        resp = self._handle_response(req)
+        resp = self._handle_response(req, name="get records")
         return resp
 
     def update_records(self, domain, records):
@@ -89,13 +91,13 @@ class MijnHostClient(object):
         req = requests.put(
             url, headers=self.headers, data=json.dumps({"records": records})
         )
-        resp = self._handle_response(req)
+        resp = self._handle_response(req, name="update records")
         return resp
 
     def add_txt_record(
         self, domain: str, record_name: str, record_content: str, ttl: int
     ):
-        records = self.get_records(domain).get("records", [])
+        records = self.get_records(domain).get("data", {}).get("records", [])
         new_record = {
             "type": "TXT",
             "name": record_name,
@@ -106,12 +108,12 @@ class MijnHostClient(object):
             r for r in records if not (r["type"] == "TXT" and r["name"] == record_name)
         ]
         filtered_records.append(new_record)
-        self.update_records(domain, filtered_records)
+        self.update_records(domain, [new_record])
 
     def del_txt_record(
         self, domain: str, record_name: str, record_content: str
     ) -> None:
-        records = self.get_records(domain)
+        records = self.get_records(domain).get("data", {}).get("records", [])
         records_list = [
             r
             for r in records
