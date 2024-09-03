@@ -22,7 +22,7 @@ class Authenticator(dns_common.DNSAuthenticator):
 
     @classmethod
     def add_parser_arguments(
-        cls, add: Callable[..., None], default_propagation_seconds: int = 10
+        cls, add: Callable[..., None], default_propagation_seconds: int = 60
     ) -> None:
         super().add_parser_arguments(add, default_propagation_seconds)
         add("credentials", help="mijn.host credentials INI file.")
