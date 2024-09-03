@@ -18,7 +18,7 @@ class Authenticator(dns_common.DNSAuthenticator):
         self.credentials: Optional[CredentialsConfiguration] = None
         self.ttl = 60
 
-    description = "Obtain certificates using DNS-01 challenge against mijn.host"
+    description = "This plugin configures a DNS TXT record to respond to a dns-01 challenge using the mijn.host API"
 
     @classmethod
     def add_parser_arguments(
@@ -76,12 +76,6 @@ class MijnHostClient(object):
             raise errors.PluginError(
                 f"API response with non-json: {resp.text}")
 
-    def list_domains(self):
-        url = urllib.parse.urljoin(BASE_URL, "domains")
-        req = requests.get(url, headers=self.headers)
-        resp = self._handle_response(req, name="list domains")
-        return resp
-
     def get_records(self, domain):
         url = urllib.parse.urljoin(BASE_URL, f"domains/{domain}/dns")
         req = requests.get(url, headers=self.headers)
@@ -107,10 +101,10 @@ class MijnHostClient(object):
             "ttl": ttl,
         }
         filtered_records = [
-            r for r in records if not (r["type"] == "TXT" and r["name"] == record_name)
+            r for r in records if not (r["type"] == "TXT" and r["name"] == (record_name + "."))
         ]
         filtered_records.append(new_record)
-        self.update_records(domain, [new_record])
+        self.update_records(domain, filtered_records)
 
     def del_txt_record(
         self, domain: str, record_name: str, record_content: str
