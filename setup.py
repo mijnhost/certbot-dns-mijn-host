@@ -1,5 +1,6 @@
 from setuptools import setup, find_packages
 
+
 install_requires = [
     "acme==2.11.0",
     "certbot==2.11.0",
@@ -24,9 +25,12 @@ install_requires = [
     "urllib3==2.2.2",
 ]
 
-VERSION = "0.0.1"
-DESCRIPTION = "My first Python package"
-LONG_DESCRIPTION = "My first Python package with a slightly longer description"
+VERSION = "0.0.2"
+
+DESCRIPTION = "Certbot DNS plugin for mijn.host service, enabling the automation of DNS-01 challenges for issuing wildcard SSL certificates. This plugin simplifies the process of obtaining and renewing SSL certificates by integrating directly with the DNS API of mijn.host Service, making it ideal for system administrators and DevOps professionals managing secure web services."
+
+with open("README.md", "r", encoding="utf-8") as fh:
+    LONG_DESCRIPTION = fh.read()
 
 setup(
     name="certbot-dns-mijn-host",
