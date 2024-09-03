@@ -66,7 +66,6 @@ class MijnHostClient(object):
 
     def _handle_response(self, resp: requests.Response, name: str = "something") -> Any:
         if resp.status_code not in (200, 202):
-            print("Failed function name: ", name, resp.text)
             raise errors.PluginError(
                 f"Received non-OK status from mijn.host API {resp.status_code}"
             )
