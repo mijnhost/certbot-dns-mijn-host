@@ -16,11 +16,13 @@ class Authenticator(dns_common.DNSAuthenticator):
     def __init__(self, *args, **kwargs):
         super(Authenticator, self).__init__(*args, **kwargs)
         self.credentials: Optional[CredentialsConfiguration] = None
-        self.ttl = 120
+        self.ttl = 15
+
+    description = "This plugin configures a DNS TXT record to respond to a dns-01 challenge using the mijn.host API"
 
     @classmethod
     def add_parser_arguments(
-        cls, add: Callable[..., None], default_propagation_seconds: int = 10
+        cls, add: Callable[..., None], default_propagation_seconds: int = 60
     ) -> None:
         super().add_parser_arguments(add, default_propagation_seconds)
         add("credentials", help="mijn.host credentials INI file.")
@@ -74,12 +76,6 @@ class MijnHostClient(object):
             raise errors.PluginError(
                 f"API response with non-json: {resp.text}")
 
-    def list_domains(self):
-        url = urllib.parse.urljoin(BASE_URL, "domains")
-        req = requests.get(url, headers=self.headers)
-        resp = self._handle_response(req, name="list domains")
-        return resp
-
     def get_records(self, domain):
         url = urllib.parse.urljoin(BASE_URL, f"domains/{domain}/dns")
         req = requests.get(url, headers=self.headers)
@@ -100,15 +96,16 @@ class MijnHostClient(object):
         records = self.get_records(domain).get("data", {}).get("records", [])
         new_record = {
             "type": "TXT",
-            "name": record_name,
+            "name": record_name + ".",
             "value": record_content,
             "ttl": ttl,
         }
-        filtered_records = [
-            r for r in records if not (r["type"] == "TXT" and r["name"] == record_name)
-        ]
-        filtered_records.append(new_record)
-        self.update_records(domain, [new_record])
+
+        if new_record in records:
+            return
+
+        records.append(new_record)
+        self.update_records(domain, records)
 
     def del_txt_record(
         self, domain: str, record_name: str, record_content: str
@@ -119,7 +116,7 @@ class MijnHostClient(object):
             for r in records
             if not (
                 r["type"] == "TXT"
-                and r["name"] == record_name
+                and r["name"] == record_name + "."
                 and r["value"] == record_content
             )
         ]
