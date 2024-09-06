@@ -27,11 +27,11 @@ pip install certbot-dns-mijn-host
 
 ## Arguments
 
-| Argument                           | Example           | Description                                                                                     |
-| ---------------------------------- | ----------------- | ----------------------------------------------------------------------------------------------- |
-| --authenticator                    | dns-mijn-host     | Specifies that Certbot should use this plugin. Use dns-mijnhost as the value.                   |
-| --dns-mijnhost-credentials         | ./credentials.ini | Points to the credentials file containing your mijn.host API key. Required.                     |
-| --dns-mijnhost-propagation-seconds | 60                | Sets the wait time in seconds before Certbot checks the TXT record. The default is 120 seconds. |
+| Argument                            | Example           | Description                                                                                     |
+| ----------------------------------- | ----------------- | ----------------------------------------------------------------------------------------------- |
+| --authenticator                     | dns-mijn-host     | Specifies that Certbot should use this plugin. Use dns-mijnhost as the value.                   |
+| --dns-mijn-host-credentials         | ./credentials.ini | Points to the credentials file containing your mijn.host API key. Required.                     |
+| --dns-mijn-host-propagation-seconds | 60                | Sets the wait time in seconds before Certbot checks the TXT record. The default is 120 seconds. |
 
 ## Credentials File
 
