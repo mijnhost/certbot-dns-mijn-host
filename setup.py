@@ -2,8 +2,8 @@ from setuptools import setup, find_packages
 
 
 install_requires = [
-    "acme==2.11.0",
-    "certbot==2.11.0",
+    "acme>=2.11.0",
+    "certbot>=2.11.0",
     "certifi==2024.8.30",
     "cffi==1.17.0",
     "charset-normalizer==3.3.2",
