@@ -57,6 +57,17 @@ class Authenticator(dns_common.DNSAuthenticator):
         return MijnHostClient(self.credentials.conf("api-key"))
 
 
+class MijnHostClientConnectionError(errors.PluginError):
+    def __init__(self, response):
+        self.status_code = response.status_code
+        try:
+            response_data = response.json()
+        except json.decoder.JSONDecodeError:
+            response_data = {}
+        self.status_description = response_data.get("status_description")
+        super().__init__(f"Received non-OK status from mijn.host API {self.status_code}: {self.status_description}")
+
+
 class MijnHostClient(object):
     def __init__(self, api_key):
         logger.debug("Creating MijnHostClient")
@@ -66,9 +77,7 @@ class MijnHostClient(object):
 
     def _handle_response(self, resp: requests.Response, name: str = "something") -> Any:
         if resp.status_code not in (200, 202):
-            raise errors.PluginError(
-                f"Received non-OK status from mijn.host API {resp.status_code}"
-            )
+            raise MijnHostClientConnectionError(resp)
         try:
             return resp.json()
         except json.decoder.JSONDecodeError:
@@ -88,10 +97,25 @@ class MijnHostClient(object):
         resp = self._handle_response(req, name="update records")
         return resp
 
+    def get_txt_records_and_base_domain(self, domain: str):
+        for base_domain_guess in dns_common.base_domain_name_guesses(domain):
+            try:
+                records = self.get_records(base_domain_guess).get("data", {}).get("records", [])
+                base_domain = base_domain_guess
+                break
+            except MijnHostClientConnectionError as e:
+                # Response 400 means valid API token but invalid domain
+                if e.status_code != 400:
+                    raise
+        else:
+            raise errors.PluginError("API key does not provide access to requested domain")
+
+        return records, base_domain
+
     def add_txt_record(
         self, domain: str, record_name: str, record_content: str, ttl: int
     ):
-        records = self.get_records(domain).get("data", {}).get("records", [])
+        records, base_domain = self.get_txt_records_and_base_domain(domain)
         new_record = {
             "type": "TXT",
             "name": record_name + ".",
@@ -103,12 +127,12 @@ class MijnHostClient(object):
             return
 
         records.append(new_record)
-        self.update_records(domain, records)
+        self.update_records(base_domain, records)
 
     def del_txt_record(
         self, domain: str, record_name: str, record_content: str
     ) -> None:
-        records = self.get_records(domain).get("data", {}).get("records", [])
+        records, base_domain = self.get_txt_records_and_base_domain(domain)
         records_list = [
             r
             for r in records
@@ -118,4 +142,4 @@ class MijnHostClient(object):
                 and r["value"] == record_content
             )
         ]
-        self.update_records(domain, records_list)
+        self.update_records(base_domain, records_list)
