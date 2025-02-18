@@ -11,7 +11,7 @@ idna==3.8
 josepy==1.14.0
 parsedatetime==2.6
 pycparser==2.22
-pyOpenSSL>=25.0.0
+PyOpenSSL>=25.0.0
 pyRFC3339==1.1
 pytz==2024.1
 requests==2.32.3
