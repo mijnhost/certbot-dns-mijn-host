@@ -1,3 +1,4 @@
+.PHONY: lint lint-fix format test build install-local clean all
 lint:
 	ruff check --config ruff.toml
 
