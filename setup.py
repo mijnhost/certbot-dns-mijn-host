@@ -14,7 +14,7 @@ install_requires = [
     "josepy==1.14.0",
     "parsedatetime==2.6",
     "pycparser==2.22",
-    "pyOpenSSL==24.2.1",
+    "PyOpenSSL>=25.0.0",
     "pyRFC3339==1.1",
     "pytz==2024.1",
     "requests==2.32.3",
@@ -22,9 +22,10 @@ install_requires = [
     "setuptools==74.0.0",
     "six==1.16.0",
     "urllib3==2.2.2",
+    "wheel==0.44.0",
 ]
 
-VERSION = "0.0.7"
+VERSION = "0.0.8"
 
 DESCRIPTION = "Certbot DNS plugin for mijn.host service, enabling the automation of DNS-01 challenges for issuing wildcard SSL certificates. This plugin simplifies the process of obtaining and renewing SSL certificates by integrating directly with the DNS API of mijn.host Service, making it ideal for system administrators and DevOps professionals managing secure web services."
 

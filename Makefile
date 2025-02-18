@@ -16,3 +16,6 @@ build:
 
 install-local:
 	pip install --use-pep517 -e .
+
+clean:
+	rm -rf dist/ certbot_dns_mijn_host.egg-info/ build/
