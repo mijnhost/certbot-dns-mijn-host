@@ -1,11 +1,12 @@
+import json
+import logging
+import urllib
+from typing import Any, Callable, Optional
+
+import requests
 from certbot import errors
 from certbot.plugins import dns_common
 from certbot.plugins.dns_common import CredentialsConfiguration
-import requests
-import json
-import logging
-from typing import Any, Optional, Callable
-import urllib
 
 logger = logging.getLogger(__name__)
 
@@ -65,7 +66,9 @@ class MijnHostClientConnectionError(errors.PluginError):
         except json.decoder.JSONDecodeError:
             response_data = {}
         self.status_description = response_data.get("status_description")
-        super().__init__(f"Received non-OK status from mijn.host API {self.status_code}: {self.status_description}")
+        super().__init__(
+            f"Received non-OK status from mijn.host API {self.status_code}: {self.status_description}"
+        )
 
 
 class MijnHostClient(object):
@@ -100,7 +103,11 @@ class MijnHostClient(object):
     def get_txt_records_and_base_domain(self, domain: str):
         for base_domain_guess in dns_common.base_domain_name_guesses(domain):
             try:
-                records = self.get_records(base_domain_guess).get("data", {}).get("records", [])
+                records = (
+                    self.get_records(base_domain_guess)
+                    .get("data", {})
+                    .get("records", [])
+                )
                 base_domain = base_domain_guess
                 break
             except MijnHostClientConnectionError as e:
@@ -108,7 +115,9 @@ class MijnHostClient(object):
                 if e.status_code != 400:
                     raise
         else:
-            raise errors.PluginError("API key does not provide access to requested domain")
+            raise errors.PluginError(
+                "API key does not provide access to requested domain"
+            )
 
         return records, base_domain
 
