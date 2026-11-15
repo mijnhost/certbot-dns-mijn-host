@@ -33,8 +33,9 @@ class Authenticator(dns_common.DNSAuthenticator):
 
     def _validate_credentials(self, credentials: CredentialsConfiguration) -> None:
         api_key = credentials.conf("api-key")
-        if not api_key:
-            raise errors.PluginError("No API key provided")
+        api_token = credentials.conf("api-token")
+        if not api_key and not api_token:
+            raise errors.PluginError("No API key or token provided")
 
     def _setup_credentials(self) -> None:
         self.credentials = self._configure_credentials(
@@ -55,7 +56,12 @@ class Authenticator(dns_common.DNSAuthenticator):
     def _get_mijn_host_client(self):
         if not self.credentials:
             raise errors.PluginError("Plugin not initialized")
-        return MijnHostClient(self.credentials.conf("api-key"))
+
+        api_token = self.credentials.conf("api-token")
+        if api_token:
+            return MijnHostClient(api_token=api_token)
+        else:
+            return MijnHostClient(api_key=self.credentials.conf("api-key"))
 
 
 class MijnHostClientConnectionError(errors.PluginError):
@@ -72,11 +78,18 @@ class MijnHostClientConnectionError(errors.PluginError):
 
 
 class MijnHostClient(object):
-    def __init__(self, api_key):
+    def __init__(self, api_key=None, api_token=None):
         logger.debug("Creating MijnHostClient")
-        self.headers = {
-            "API-Key": api_key,
-        }
+        if api_token is not None:
+            self.headers = {
+                "Authorization": f"Bearer {api_token}",
+            }
+        elif api_key is not None:
+            self.headers = {
+                "API-Key": api_key,
+            }
+        else:
+            raise errors.PluginError("API key or token required.")
 
     @staticmethod
     def _handle_response(
@@ -126,7 +139,7 @@ class MijnHostClient(object):
                     continue
         else:
             raise errors.PluginError(
-                "API key does not provide access to requested domain"
+                "API key or token does not provide access to requested domain"
             )
 
     def add_txt_record(

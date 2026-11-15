@@ -5,7 +5,7 @@ install_requires = [
     "requests>=2.20.0",
 ]
 
-VERSION = "0.0.10"
+VERSION = "0.0.11"
 
 DESCRIPTION = "Certbot DNS plugin for mijn.host service, enabling the automation of DNS-01 challenges for issuing wildcard SSL certificates. This plugin simplifies the process of obtaining and renewing SSL certificates by integrating directly with the DNS API of mijn.host Service, making it ideal for system administrators and DevOps professionals managing secure web services."
 

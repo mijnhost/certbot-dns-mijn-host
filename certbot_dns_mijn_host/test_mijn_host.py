@@ -13,11 +13,11 @@ BASE_URL = "https://mijn.host/api/v2/"
 
 class TestMijnHostClient(unittest.TestCase):
     def setUp(self):
-        self.api_key = "test-api-key"
-        self.client = MijnHostClient(api_key=self.api_key)
+        self.api_token = "test-api-token"
+        self.client = MijnHostClient(api_token=self.api_token)
         self.domain = "example.com"
         self.headers = {
-            "API-Key": self.api_key,
+            "Authorization": f"Bearer {self.api_token}",
         }
 
     @patch("requests.get")
@@ -267,7 +267,8 @@ class TestMijnHostClient(unittest.TestCase):
 
         exception = e.exception
         self.assertEqual(
-            exception.args[0], "API key does not provide access to requested domain"
+            exception.args[0],
+            "API key or token does not provide access to requested domain",
         )
 
         self.assertEqual(mock_get.call_count, 3)
@@ -324,6 +325,16 @@ class TestMijnHostClient(unittest.TestCase):
                 headers=self.headers,
             ),
         )
+
+
+class TestMijnHostClientLegacy(TestMijnHostClient):
+    def setUp(self):
+        self.api_key = "test-api-key"
+        self.client = MijnHostClient(api_key=self.api_key)
+        self.domain = "example.com"
+        self.headers = {
+            "API-Key": self.api_key,
+        }
 
 
 if __name__ == "__main__":
