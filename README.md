@@ -15,7 +15,7 @@ The [mijn.host](https://mijn.host) DNS Certbot Plugin automates SSL/TLS certific
 To use the plugin, you'll need the following:
 
 - A mijn.host account
-- An API key from mijn.host
+- An API token or key from mijn.host
 
 ## Installation
 
@@ -30,14 +30,16 @@ pip install certbot-dns-mijn-host
 | Argument                            | Example           | Description                                                                                     |
 | ----------------------------------- | ----------------- | ----------------------------------------------------------------------------------------------- |
 | --authenticator                     | dns-mijn-host     | Specifies that Certbot should use this plugin. Use dns-mijnhost as the value.                   |
-| --dns-mijn-host-credentials         | ./credentials.ini | Points to the credentials file containing your mijn.host API key. Required.                     |
+| --dns-mijn-host-credentials         | ./credentials.ini | Points to the credentials file containing your mijn.host API token or key. Required.            |
 | --dns-mijn-host-propagation-seconds | 60                | Sets the wait time in seconds before Certbot checks the TXT record. The default is 120 seconds. |
 
 ## Credentials File
 
 ```ini
 dns_mijn_host_api_key = YOUR_API_KEY
+dns_mijn_host_api_token = YOUR_API_TOKEN
 ```
+
 
 Make sure the file is stored securely and not accessible by unauthorized users.
 
